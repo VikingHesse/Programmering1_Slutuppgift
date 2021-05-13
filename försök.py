@@ -15,16 +15,17 @@ dagligadödsfall = pd.read_csv("National_Daily_Deaths.csv", encoding="ISO-8859-1
 veckodata = pd.read_csv("Municipality_Weekly_Data.csv", encoding="UTF-8", header=0)
 gbgdata = veckodata[veckodata["Municipality"].str.contains("Göteborg")]
 åldersdata = pd.read_csv("National_Total_Deaths_by_Age_Group.csv", encoding="UTF-8", header=0)
+regiondata = pd.read_csv("Regional_Daily_Cases.csv", encoding="UTF-8", header=0)
 
 #skapa figs
-fig = px.pie(genderdata, values='Total_Deaths', names='Gender', title='Antalet dödsfall män kontra kvinnor', height=700)
-fig2 = px.bar(dagligadödsfall, x="Date", y="National_Daily_Deaths", title="Antalet döda i COVID per dag", height=700)
-fig3 = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", color="Municipality", animation_frame="Week_Number", animation_group="Municipality", range_y=[0,75], title="Antalet fall i Göteborg per 100k veckorna 1-53 2020", height=700)
-
+genderdata_graf = px.pie(genderdata, values='Total_Deaths', names='Gender', title='Antalet dödsfall män kontra kvinnor', height=700)
+dagligadödsfall_graf = px.bar(dagligadödsfall, x="Date", y="National_Daily_Deaths", title="Antalet döda i COVID per dag", height=700)
+gbgdata_graf = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", color="Municipality", animation_frame="Week_Number", animation_group="Municipality", range_y=[0,75], title="Antalet fall i Göteborg per 100k veckorna 1-53 2020", height=700)
 åldersdata_graf = px.pie(åldersdata, values="Total_Cases", names="Age_Group", title="Totala fall", height=700)
+regiondata_graf = px.line(regiondata, x="Date", y="Västra_Götaland")
 
-#flyttar slidern på fig 3
-fig3['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
+#flyttar slidern på göteborgsgrafen
+gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
 
 # utseendet
 app.layout = html.Div(children=[
@@ -34,8 +35,8 @@ app.layout = html.Div(children=[
 
 
         dcc.Graph(
-            id="graph1",
-            figure=fig,
+            id="gendergraf",
+            figure=genderdata_graf,
         ),
     ]),
 
@@ -44,8 +45,8 @@ app.layout = html.Div(children=[
 
 
         dcc.Graph(
-            id="graph2",
-            figure=fig2,
+            id="dagligadödsfallgraf",
+            figure=dagligadödsfall_graf,
         ),
     ]),
 
@@ -54,8 +55,8 @@ app.layout = html.Div(children=[
 
 
         dcc.Graph(
-            id="graph3",
-            figure=fig3,
+            id="gbgdatagraf",
+            figure=gbgdata_graf,
         ),
     ]),
 
@@ -65,15 +66,26 @@ app.layout = html.Div(children=[
         dcc.Dropdown(
             id = "drop",
             options = [dict(label = "Totala fall", value="Totala fall"), dict(label = "Totala dödsfall", value="Totala dödsfall"), dict(label = "Totala IVA fall", value="Totala IVA fall")],
-            value = "totalfall"
+            value = "Totala fall"
         ),
         
         dcc.Graph(
             id="åldersgraf",
             figure=åldersdata_graf,
         ),
-
     ]),
+    
+    html.Div([
+        html.H1(children="COVID DATA GRAF 5"),
+
+
+        dcc.Graph(
+            id="regiongraf",
+            figure=regiondata_graf,
+        ),
+    ]),
+
+
 ])
 
 @app.callback(
