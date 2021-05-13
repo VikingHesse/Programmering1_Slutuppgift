@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 #genererar data
 genderdata = pd.read_csv("Gender_Data.csv", encoding="ISO-8859-1", header=0)
@@ -33,7 +33,7 @@ gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
 app.layout = html.Div(children=[
 
     html.Div([
-        html.H1(children = "COVID DATA GRAF 1"), 
+        html.H1("COVID DATA GRAF 1"),
 
 
         dcc.Graph(
@@ -88,7 +88,7 @@ app.layout = html.Div(children=[
     ]),
 
     html.Div([
-        html.H1(children="COVID DATA GRAF 5"),
+        html.H1(children="COVID DATA GRAF 6"),
 
 
         dcc.Graph(
