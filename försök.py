@@ -24,7 +24,7 @@ dagligadödsfall_graf = px.bar(dagligadödsfall, x="Date", y="National_Daily_Dea
 gbgdata_graf = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", color="Municipality", animation_frame="Week_Number", animation_group="Municipality", range_y=[0,75], title="Antalet fall i Göteborg per 100k veckorna 1-53 2020", height=700)
 åldersdata_graf = px.pie(åldersdata, values="Total_Cases", names="Age_Group", title="Totala fall", height=700)
 regiondata_graf = px.line(regiondailydata, x="Date", y="Västra_Götaland", title="Antalet döda i COVID per dag i Västra Götaland", height=700)
-regiontotaldata_graf = px.scatter(regiontotaldata, x="Total_Deaths", y="Total_ICU_Admissions", color="Region", size="Total_Cases",title="Totala dödsfall, IVA fall för varje region", height=700)
+regiontotaldata_graf = px.scatter(regiontotaldata, x="Total_Deaths", y="Total_ICU_Admissions", color="Region", size="Total_Cases",title="Totala dödsfall samt IVA fall för varje region", height=700)
 
 #flyttar slidern på göteborgsgrafen
 gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
@@ -105,7 +105,6 @@ app.layout = html.Div(children=[
     [Input("drop", "value")]
 )
 def update_figure(value):
-    global värden
 
     if value == "Totala fall":  värden = "Total_Cases"
     elif value == "Totala dödsfall": värden = "Total_Deaths"
