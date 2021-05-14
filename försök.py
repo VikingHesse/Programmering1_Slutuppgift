@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__)
 
 #genererar data
 genderdata = pd.read_csv("Gender_Data.csv", encoding="ISO-8859-1", header=0)
@@ -32,8 +32,8 @@ gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
 # utseendet
 app.layout = html.Div(children=[
 
-    html.Div([
-        html.H1("COVID DATA GRAF 1"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 1", className="H1"),
 
 
         dcc.Graph(
@@ -42,8 +42,9 @@ app.layout = html.Div(children=[
         ),
     ]),
 
-    html.Div([
-        html.H1(children="COVID DATA GRAF 2"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 2", className="H1"),
+        
 
 
         dcc.Graph(
@@ -52,8 +53,8 @@ app.layout = html.Div(children=[
         ),
     ]),
 
-    html.Div([
-        html.H1(children="COVID DATA GRAF 3"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 3", className="H1"),
 
 
         dcc.Graph(
@@ -62,8 +63,8 @@ app.layout = html.Div(children=[
         ),
     ]),
 
-    html.Div([
-        html.H1(children="COVID DATA GRAF 4"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 4", className="H1"),
 
         dcc.Dropdown(
             id = "drop",
@@ -77,8 +78,8 @@ app.layout = html.Div(children=[
         ),
     ]),
     
-    html.Div([
-        html.H1(children="COVID DATA GRAF 5"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 5", className="H1"),
 
 
         dcc.Graph(
@@ -87,8 +88,8 @@ app.layout = html.Div(children=[
         ),
     ]),
 
-    html.Div([
-        html.H1(children="COVID DATA GRAF 6"),
+    html.Div(className="box",children=[
+        html.H1("GRAF 6", className="H1"),
 
 
         dcc.Graph(
@@ -110,7 +111,7 @@ def update_figure(value):
     elif value == "Totala dödsfall": värden = "Total_Deaths"
     elif value == "Totala IVA fall": värden = "Total_ICU_Admissions"
 
-    åldersdata_graf = px.pie(åldersdata, values=värden, names="Age_Group", title=f"{value}")
+    åldersdata_graf = px.pie(åldersdata, values=värden, names="Age_Group", title=f"{value}", height=700)
     åldersdata_graf.update_layout(transition_duration=500)
     return åldersdata_graf
 

@@ -1,0 +1,11 @@
+.box{
+    background-color: #ffffff;
+    box-shadow: 0 0 15px #d1d0d0;
+}
+
+.H1{
+    font-size: 48px;
+    color: rgb(200, 46, 46);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
