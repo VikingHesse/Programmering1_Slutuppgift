@@ -98,23 +98,23 @@ app.layout = html.Div(children=[
         ),
     ]),
 
-
 ])
+
 
 @app.callback(
     Output("åldersgraf", "figure"),
     [Input("drop", "value")]
 )
+
 def update_figure(value):
 
     if value == "Totala fall":  värden = "Total_Cases"
     elif value == "Totala dödsfall": värden = "Total_Deaths"
     elif value == "Totala IVA fall": värden = "Total_ICU_Admissions"
 
-    åldersdata_graf = px.pie(åldersdata, values=värden, names="Age_Group", title=f"{value}", height=700)
+    åldersdata_graf = px.pie(åldersdata, values=värden, names="Age_Group", title=f"{value} i de olika åldersgrupperna", height=700)
     åldersdata_graf.update_layout(transition_duration=500)
     return åldersdata_graf
-
 
 
 if __name__ == "__main__":
