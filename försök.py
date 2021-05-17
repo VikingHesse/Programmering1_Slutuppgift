@@ -18,6 +18,10 @@ gbgdata = veckodata[veckodata["Municipality"].str.contains("Göteborg")]
 regiondailydata = pd.read_csv("Regional_Daily_Cases.csv", encoding="UTF-8", header=0)
 regiontotaldata = pd.read_csv("Regional_Totals_Data.csv", encoding="UTF-8", header=0)
 
+
+region_koordinater = pd.read_csv("koordinater.csv", encoding="UTF-8", header=0)
+regiontotaldata_koordinater = regiontotaldata.merge(region_koordinater)
+
 #skapa figs
 genderdata_graf = px.pie(genderdata, values='Total_Deaths', names='Gender', title='Antalet dödsfall män kontra kvinnor', height=700)
 dagligadödsfall_graf = px.bar(dagligadödsfall, x="Date", y="National_Daily_Deaths", title="Antalet döda i COVID per dag", height=700)
@@ -25,6 +29,7 @@ gbgdata_graf = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", 
 åldersdata_graf = px.pie(åldersdata, values="Total_Cases", names="Age_Group", title="Totala fall", height=700)
 regiondata_graf = px.line(regiondailydata, x="Date", y="Västra_Götaland", title="Antalet döda i COVID per dag i Västra Götaland", height=700)
 regiontotaldata_graf = px.scatter(regiontotaldata, x="Total_Deaths", y="Total_ICU_Admissions", color="Region", size="Total_Cases",title="Totala dödsfall samt IVA fall för varje region", height=700)
+regionkarta_graf = px.scatter_geo(regiontotaldata_koordinater, lat="lat", lon="lon", color="Region", scope="europe", size="Cases_per_100k_Pop", hover_name="Region", size_max=16, fitbounds="locations", height=700)
 
 #flyttar slidern på göteborgsgrafen
 gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
@@ -95,6 +100,16 @@ app.layout = html.Div(children=[
         dcc.Graph(
             id="regiontotaldatagraf",
             figure=regiontotaldata_graf,
+        ),
+    ]),
+
+    html.Div(className="box",children=[
+        html.H1("GRAF 7", className="H1"),
+
+
+        dcc.Graph(
+            id="regionkartagraf",
+            figure=regionkarta_graf,
         ),
     ]),
 
