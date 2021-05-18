@@ -1,3 +1,4 @@
+#Importerar diverse libraries
 import plotly.express as px 
 import dash
 import dash_bootstrap_components as dbc
@@ -7,6 +8,7 @@ import pandas as pd
 import numpy as np
 from dash.dependencies import Input, Output
 
+#initierar dash
 app = dash.Dash(__name__)
 
 #genererar data
@@ -18,11 +20,10 @@ gbgdata = veckodata[veckodata["Municipality"].str.contains("Göteborg")]
 regiondailydata = pd.read_csv("Regional_Daily_Cases.csv", encoding="UTF-8", header=0)
 regiontotaldata = pd.read_csv("Regional_Totals_Data.csv", encoding="UTF-8", header=0)
 
-
-region_koordinater = pd.read_csv("koordinater.csv", encoding="UTF-8", header=0)
+region_koordinater = pd.read_csv("regionkoordinater.csv", encoding="UTF-8", header=0)
 regiontotaldata_koordinater = regiontotaldata.merge(region_koordinater)
 
-#skapa figs
+#skapar figs
 genderdata_graf = px.pie(genderdata, values='Total_Deaths', names='Gender', title='Antalet dödsfall män kontra kvinnor', height=700)
 dagligadödsfall_graf = px.bar(dagligadödsfall, x="Date", y="National_Daily_Deaths", title="Antalet döda i COVID per dag", height=700)
 gbgdata_graf = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", color="Municipality", animation_frame="Week_Number", animation_group="Municipality", range_y=[0,75], title="Antalet fall i Göteborg per 100k veckorna 1-53 2020", height=700)
@@ -32,11 +33,13 @@ regiontotaldata_graf = px.scatter(regiontotaldata, x="Total_Deaths", y="Total_IC
 regionkarta_graf = px.scatter_geo(regiontotaldata_koordinater, lat="lat", lon="lon", color="Region", scope="europe", size="Cases_per_100k_Pop", hover_name="Region", size_max=16, fitbounds="locations", height=700)
 
 #flyttar slidern på göteborgsgrafen
-gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150,)
+gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150)
 
-# utseendet
+#utseendet, fungerar som HTML
 app.layout = html.Div(children=[
 
+    #gör en div som får klassen "box", denna klassen har jag ändrat css på i ett annat dokument som heter div.css
+    #diven får children H1 (som titel, med klassen H1) samt dash component graph som får figure värdet "genderdata_graf" vilket visar grafen.
     html.Div(className="box",children=[
         html.H1("GRAF 1", className="H1"),
 
@@ -115,12 +118,13 @@ app.layout = html.Div(children=[
 
 ])
 
-
+#Bestämmer output och input, output blir åldersgraf o figure i detta fall. Input blir drop och value
 @app.callback(
     Output("åldersgraf", "figure"),
     [Input("drop", "value")]
 )
 
+#Skapar en funktion som uppdaterar graf 4 utefter dropdown values. Om man väljer någon av alternativen i dropdown så ändras "values" i pie charten. 
 def update_figure(value):
 
     if value == "Totala fall":  värden = "Total_Cases"
@@ -131,6 +135,6 @@ def update_figure(value):
     åldersdata_graf.update_layout(transition_duration=500)
     return åldersdata_graf
 
-
+#Kör dash på local server
 if __name__ == "__main__":
     app.run_server(debug = True)
