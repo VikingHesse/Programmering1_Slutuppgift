@@ -1,7 +1,6 @@
 #Importerar diverse libraries
 import plotly.express as px 
 import dash
-import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd 
@@ -30,7 +29,7 @@ gbgdata_graf = px.bar(gbgdata, x="Municipality", y="Weekly_Cases_per_100k_Pop", 
 åldersdata_graf = px.pie(åldersdata, values="Total_Cases", names="Age_Group", title="Totala fall", height=700)
 regiondata_graf = px.line(regiondailydata, x="Date", y="Västra_Götaland", title="Antalet döda i COVID per dag i Västra Götaland", height=700)
 regiontotaldata_graf = px.scatter(regiontotaldata, x="Total_Deaths", y="Total_ICU_Admissions", color="Region", size="Total_Cases",title="Totala dödsfall samt IVA fall för varje region", height=700)
-regionkarta_graf = px.scatter_geo(regiontotaldata_koordinater, lat="lat", lon="lon", color="Region", scope="europe", size="Cases_per_100k_Pop", hover_name="Region", size_max=16, fitbounds="locations", height=700)
+regionkarta_graf = px.scatter_geo(regiontotaldata_koordinater, lat="lat", lon="lon", color="Region", scope="europe", size="Total_Cases", hover_name="Region", size_max=25, fitbounds="locations", height=700)
 
 #flyttar slidern på göteborgsgrafen
 gbgdata_graf['layout']['sliders'][0]['pad']=dict(r= 10, t= 150)
